@@ -3,8 +3,11 @@ import '../models/event_model.dart';
 import '../services/event_service.dart';
 
 class EventController extends GetxController {
-  final EventService _service = EventService();
+  final EventService _service;
 
+  // 👇 CE CONSTRUCTEUR DOIT AVOIR LE PARAMÈTRE NOMMÉ 'service'
+  EventController({EventService? service})
+      : _service = service ?? EventService();
   var events = <EventModel>[].obs;
 
   @override
@@ -13,7 +16,7 @@ class EventController extends GetxController {
     events.bindStream(_service.getEvents());
   }
 
-  void logButton(int id) async {
+Future<void> logButton(int id) async {
     try {
       await _service.logEvent(EventModel(buttonId: id, timestamp: DateTime.now()));
     } catch (e) {

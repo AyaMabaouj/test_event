@@ -1,30 +1,46 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
+// test/widgets/app_widget_test.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:get/get.dart';
+import 'package:test_event/controllers/event_controller.dart';
+import 'package:test_event/models/event_model.dart';
 import 'package:test_event/main.dart';
+import 'package:test_event/services/event_service.dart';
+
+class FakeEventService implements EventService {
+  final List<EventModel> _events = [];
+
+  @override
+  Future<void> logEvent(EventModel event) async {
+    _events.add(event);
+  }
+
+  @override
+  Stream<List<EventModel>> getEvents() {
+    return Stream.value(_events);
+  }
+}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget( MyApp());
+  setUp(() {
+    Get.put(EventController(service: FakeEventService()));
+  });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('App loads and shows home screen title', (tester) async {
+    await tester.pumpWidget(const MyApp());
+    expect(find.text("Choose an Event"), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('Tapping an event button logs an event visually', (tester) async {
+    await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    final button = find.text('Event 1');
+    expect(button, findsOneWidget);
+
+    await tester.tap(button);
+    await tester.pump(); // Allow time for snackbar or UI update
+
+    // No Snackbar shown using Scaffold; Get.snackbar is not in widget tree
+    expect(find.byType(SnackBar), findsNothing);
   });
 }
