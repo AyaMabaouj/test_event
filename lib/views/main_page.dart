@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:test_event/views/home_screen.dart';
 import '../controllers/navigation_controller.dart';
+import 'home_screen.dart';
 import 'event_log_screen.dart';
 
 class MainPage extends StatelessWidget {
@@ -13,7 +13,7 @@ class MainPage extends StatelessWidget {
     EventLogScreen(),
   ];
 
-  final items = <Widget>[
+  final List<Widget> items = [
     Icon(Icons.home, size: 30),
     Icon(Icons.history, size: 30),
   ];
@@ -21,7 +21,7 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
-          extendBody: true, // Pour effet de transparence en bas
+          extendBody: true,
           body: pages[navController.currentIndex.value],
           bottomNavigationBar: CurvedNavigationBar(
             index: navController.currentIndex.value,

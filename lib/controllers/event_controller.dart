@@ -4,20 +4,21 @@ import '../services/event_service.dart';
 
 class EventController extends GetxController {
   final EventService _service = EventService();
+
   var events = <EventModel>[].obs;
 
   @override
   void onInit() {
-    events.bindStream(_service.getEvents());
     super.onInit();
+    events.bindStream(_service.getEvents());
   }
 
   void logButton(int id) async {
     try {
       await _service.logEvent(EventModel(buttonId: id, timestamp: DateTime.now()));
     } catch (e) {
-     print("Firebase Error: $e");
-     Get.snackbar('Error', 'Failed to save the event');
+      print("Firebase Error: $e");
+      Get.snackbar('Error', 'Failed to save the event');
     }
   }
 }
