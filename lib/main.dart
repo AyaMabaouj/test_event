@@ -6,7 +6,6 @@ import 'package:test_event/views/main_page.dart';
 import 'package:test_event/widgets/theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   try {
     if (Firebase.apps.isEmpty) {
       await Firebase.initializeApp(
@@ -24,12 +23,9 @@ void main() async {
   } catch (e) {
     print('Firebase already initialized: $e');
   }
-
   Get.put(EventController());
   runApp(const MyApp());
 }
-
-
 class MyApp extends StatelessWidget {
    const MyApp({super.key});
   @override
@@ -50,8 +46,6 @@ class MyApp extends StatelessWidget {
     ),
   ),
        home: MainPage(),
-
 );
-
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../controllers/event_controller.dart';
+import '../models/event_model.dart'; // <-- Nécessaire pour accéder à EventModel
 
 class EventLogScreen extends StatelessWidget {
   final controller = Get.find<EventController>();
@@ -26,6 +27,7 @@ class EventLogScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final e = controller.events[index];
               return Card(
+                  color: Colors.white, // <-- ajoute cette ligne
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -40,7 +42,13 @@ class EventLogScreen extends StatelessWidget {
                     ),
                   ),
                   title: Text("Event ${e.buttonId} pressed"),
-                  subtitle: Text(DateFormat.yMd().add_jms().format(e.timestamp)),
+                  subtitle: Text(
+                    DateFormat('dd/MM/yyyy hh:mm:ss a').format(e.timestamp),
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () => controller.deleteEvent(e),
+                  ),
                 ),
               );
             },

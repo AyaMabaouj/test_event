@@ -8,12 +8,16 @@ class EventService {
     await _db.add(event.toMap());
   }
 
-  Stream<List<EventModel>> getEvents() {
-    return _db
-        .orderBy('timestamp', descending: true)
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => EventModel.fromMap(doc.data()))
-            .toList());
-  }
+Stream<List<EventModel>> getEvents() {
+  return _db
+      .orderBy('timestamp', descending: true)
+      .snapshots()
+      .map((snapshot) => snapshot.docs
+          .map((doc) => EventModel.fromMap(doc.data(), id: doc.id))
+          .toList());
+}
+Future<void> deleteEvent(String id) async {
+  await _db.doc(id).delete();
+}
+
 }

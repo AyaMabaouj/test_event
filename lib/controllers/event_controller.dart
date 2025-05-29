@@ -5,7 +5,6 @@ import '../services/event_service.dart';
 class EventController extends GetxController {
   final EventService _service;
 
-  // 👇 CE CONSTRUCTEUR DOIT AVOIR LE PARAMÈTRE NOMMÉ 'service'
   EventController({EventService? service})
       : _service = service ?? EventService();
   var events = <EventModel>[].obs;
@@ -24,4 +23,14 @@ Future<void> logButton(int id) async {
       Get.snackbar('Error', 'Failed to save the event');
     }
   }
+  Future<void> deleteEvent(EventModel event) async {
+  try {
+    if (event.id != null) {
+      await _service.deleteEvent(event.id!);
+    }
+  } catch (e) {
+    Get.snackbar('Erreur', 'Échec de la suppression');
+  }
+}
+
 }
